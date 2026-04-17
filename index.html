@@ -402,18 +402,31 @@
         }
 
         .principal-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #dba44b, #b87e2e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: #0a1f2c;
-            border: 4px solid #ffcf8a;
-            box-shadow: 0 0 30px #ffb347;
-        }
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    /* Keep the border and shadow for the "glow" effect */
+    border: 4px solid #ffcf8a;
+    box-shadow: 0 0 30px #ffb347;
+    
+    /* Ensure the image stays contained */
+    overflow: hidden; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Optional: remove background if your image has transparency */
+    background: none; 
+}
+
+.principal-photo img {
+    width: 100%;
+    height: 100%;
+    /* 💡 This is the secret: it crops the photo perfectly into the circle */
+    object-fit: cover; 
+    /* Centers the face/subject */
+    object-position: center; 
+}
 
         .principal-address {
             font-size: 0.95rem;
@@ -676,17 +689,17 @@
             
             <!-- Principal section -->
             <section class="principal-panel">
-                <figure class="principal-photo">
-                    <i class="fas fa-user-tie"></i>
-                </figure>
+                <div class="principal-photo">
+                    <img src="Principal_images.jpg" alt="Profile Photo">
+                </div>
                 <div>
                     <h2 style="color:#fdcc80;">Dr. (Major) Anamika Jain</h2>
                     <p style="font-size:1.1rem;">Principal, Govt. Holkar Science College</p>
                 </div>
                 <address class="principal-address">
                     <i class="fas fa-map-marker-alt" style="color:#fbb03b;"></i> AB Rd, near Bhawarkua Square, Janki Nagar, Indore, Madhya Pradesh 452001<br>
-                    <?--<i class="fas fa-phone-alt" style="color:#fbb03b;"></i> +91 120 4567890 · 
-                    <i class="fas fa-envelope" style="color:#fbb03b;"></i> principal@sarvasva.edu.in-->
+                    /*<i class="fas fa-phone-alt" style="color:#fbb03b;"></i> +91 120 4567890 · 
+                    <i class="fas fa-envelope" style="color:#fbb03b;"></i> principal@sarvasva.edu.in*/
                 </address>
             </section>
 
