@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>सर्वस्व · dynamic hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>सर्वस्व · scrollable menu</title>
     <!-- Font Awesome 6 (free) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ---------- RESET & BASE ---------- */
         * {
             margin: 0;
             padding: 0;
@@ -20,9 +21,12 @@
             line-height: 1.5;
             overflow-x: hidden;
             position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* official style diagonal stripes background */
+        /* animated diagonal background */
         body::before {
             content: "";
             position: fixed;
@@ -33,19 +37,19 @@
             background: 
                 repeating-linear-gradient(
                     45deg,
-                    rgba(20, 65, 95, 0.35) 0px,
-                    rgba(20, 65, 95, 0.35) 30px,
-                    rgba(10, 45, 70, 0.35) 30px,
-                    rgba(10, 45, 70, 0.35) 60px
+                    rgba(20, 65, 95, 0.3) 0px,
+                    rgba(20, 65, 95, 0.3) 30px,
+                    rgba(10, 45, 70, 0.3) 30px,
+                    rgba(10, 45, 70, 0.3) 60px
                 ),
-                radial-gradient(circle at 70% 20%, #255e83, #06212f);
+                radial-gradient(circle at 70% 20%, #1e4f73, #041a28);
             z-index: -2;
-            animation: diagonalMove 60s linear infinite;
+            animation: diagonalMove 80s linear infinite;
         }
 
         @keyframes diagonalMove {
             0% { background-position: 0 0; }
-            100% { background-position: 100% 100%; }
+            100% { background-position: 200% 200%; }
         }
 
         body::after {
@@ -55,114 +59,186 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5, 22, 35, 0.6);
-            backdrop-filter: blur(3px);
+            background: rgba(5, 22, 35, 0.7);
+            backdrop-filter: blur(2px);
             z-index: -1;
         }
 
-        /* bilingual logo */
-        .logo {
+        /* ---------- TYPOGRAPHY ---------- */
+        h1, h2, h3, h4 {
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        address {
+            font-style: normal;
+        }
+
+        /* ---------- HEADER / NAVIGATION ---------- */
+        header {
+            background: rgba(8, 32, 48, 0.92);
+            backdrop-filter: blur(12px);
+            padding: 0.7rem 1.2rem;
             display: flex;
             align-items: center;
-            gap: 16px;
-            font-size: 2rem;
-            font-weight: 700;
+            justify-content: space-between;
+            border-bottom: 2px solid #e5a53b;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 8px 20px -8px #020e17;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .logo-icon {
-            background: linear-gradient(145deg, #cf9f2e, #e67e22);
-            color: #0b2a38;
-            width: 62px;
-            height: 62px;
-            border-radius: 18px 6px 32px 8px;
+            background: linear-gradient(145deg, #fbb03b, #f7931e);
+            color: #0a1f2c;
+            width: 54px;
+            height: 54px;
+            border-radius: 30% 70% 40% 60% / 40% 40% 60% 60%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2.4rem;
             font-weight: 800;
-            box-shadow: 0 0 28px #f0a73e;
-            border: 2px solid #f8c36d;
+            box-shadow: 0 0 25px #ffaa33;
+            border: 2px solid #ffcf8a;
+            transform: rotate(-2deg);
+            transition: 0.3s;
+        }
+        .logo-icon:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 0 40px #ffb347;
         }
 
         .logo-text {
             display: flex;
             flex-direction: column;
-            line-height: 1.2;
+            line-height: 1.1;
         }
         .logo-hindi {
-            font-size: 2.1rem;
+            font-size: 1.5rem;
             font-weight: 700;
             background: linear-gradient(135deg, #fdd28c, #ffb454);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
         }
         .logo-english {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 400;
             color: #cbdae9;
-            letter-spacing: 2.2px;
+            letter-spacing: 2px;
         }
 
-        nav {
-            background: rgba(8, 32, 48, 0.85);
-            backdrop-filter: blur(15px);
-            padding: 0.9rem 2.8rem;
+        /* menu toggle button */
+        .menu-toggle {
+            background: transparent;
+            border: 2px solid #e5a53b;
+            color: #f5d7a1;
+            width: 48px;
+            height: 48px;
+            border-radius: 40px;
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .menu-toggle:hover {
+            background: #e5a53b;
+            color: #0a1f2c;
+            box-shadow: 0 0 20px #f0b256;
+        }
+
+        /* navigation menu - NOW WITH SCROLLING */
+        nav {
+            position: fixed;
+            top: 75px;
+            left: 0;
+            width: 100%;
+            max-height: calc(100vh - 80px); /* Limit height to viewport minus header */
+            overflow-y: auto; /* Enable vertical scrolling */
+            background: rgba(8, 32, 48, 0.97);
+            backdrop-filter: blur(20px);
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 1rem 2rem;
+            gap: 0.8rem;
             border-bottom: 3px solid #e5a53b;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 16px 32px -12px #04121e;
+            box-shadow: 0 20px 30px -8px #020e17;
+            z-index: 999;
+            display: none;
+            /* Smooth scroll */
+            scroll-behavior: smooth;
         }
 
-        .nav-links {
+        /* Custom scrollbar for webkit browsers */
+        nav::-webkit-scrollbar {
+            width: 6px;
+        }
+        nav::-webkit-scrollbar-track {
+            background: rgba(255, 180, 90, 0.1);
+            border-radius: 10px;
+        }
+        nav::-webkit-scrollbar-thumb {
+            background: #e5a53b;
+            border-radius: 10px;
+        }
+        nav::-webkit-scrollbar-thumb:hover {
+            background: #f3b45a;
+        }
+
+        nav.show {
             display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem;
         }
 
-        .nav-links a {
-            padding: 0.65rem 1.5rem;
+        nav a {
+            width: 100%;
+            text-align: center;
+            padding: 0.9rem 1rem;
             font-weight: 600;
             color: #f5e5d3;
             border-radius: 60px;
             transition: 0.2s;
-            text-decoration: none;
-            font-size: 1.02rem;
+            font-size: 1.2rem;
             border: 1px solid transparent;
+            flex-shrink: 0; /* Prevent links from shrinking */
         }
 
-        .nav-links a:hover {
+        nav a:hover, nav a.active {
             background: #e1a43b;
             color: #0d1f2b;
             border-color: #fad19e;
-            box-shadow: 0 0 25px #efb458;
-            transform: scale(1.05);
+            box-shadow: 0 0 20px #efb458;
         }
 
-        .nav-links a.active {
-            background: #e1a231;
-            color: #03131f;
-            font-weight: 700;
-            box-shadow: 0 0 28px #f5b550;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 2.2rem auto;
-            padding: 0 2.2rem;
+        /* ---------- MAIN CONTENT ---------- */
+        main {
+            max-width: 100%;
+            margin: 1rem auto 2rem;
+            padding: 0 1rem;
             position: relative;
             z-index: 5;
+            flex: 1;
         }
 
+        /* page sections */
         .page {
             display: none;
-            animation: fadeUp 0.4s ease;
+            animation: fadeUp 0.3s ease;
         }
 
         .page.active-page {
@@ -170,134 +246,128 @@
         }
 
         @keyframes fadeUp {
-            0% { opacity: 0.5; transform: translateY(10px); }
+            0% { opacity: 0.5; transform: translateY(8px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        h1.section-title {
-            font-size: 2.5rem;
+        /* section headers */
+        .section-header {
+            margin: 1.2rem 0 1.5rem;
+        }
+        .section-title {
+            font-size: 1.9rem;
             font-weight: 700;
-            margin: 1.8rem 0 2.2rem;
-            border-left: 16px solid #f3a11f;
-            padding-left: 2rem;
+            border-left: 12px solid #f3a11f;
+            padding-left: 1.2rem;
             color: #ffeecb;
-            text-shadow: 2px 2px 5px #08212e;
+            text-shadow: 1px 1px 3px #08212e;
         }
 
-        /* DYNAMIC CARD STYLES */
+        /* card grid */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
         }
 
-        .card {
-            background: rgba(18, 52, 74, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 44px;
-            padding: 2rem;
-            box-shadow: 0 25px 45px -12px #030f18, 0 0 0 1px #f5b259 inset;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* article cards - semantic styling */
+        article {
+            background: rgba(18, 52, 74, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 1.5rem;
+            box-shadow: 0 15px 30px -10px #030f18, 0 0 0 1px #f5b259 inset;
+            transition: all 0.3s ease;
             border: 1px solid #f0b156;
             position: relative;
             overflow: hidden;
         }
 
-        .card::before {
+        article::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,215,140,0.2), transparent);
-            transition: left 0.7s;
+            background: linear-gradient(90deg, transparent, rgba(255,215,140,0.15), transparent);
+            transition: left 0.6s;
             z-index: 0;
-            pointer-events: none;
         }
 
-        .card:hover::before {
+        article:hover::before {
             left: 100%;
         }
 
-        .card:hover {
-            transform: translateY(-12px) scale(1.02);
+        article:hover {
+            transform: translateY(-6px);
             background: rgba(28, 68, 96, 0.9);
-            box-shadow: 0 40px 60px -8px #eda94a, 0 0 0 2px #fdc16b inset;
-            border-color: #fdc16b;
+            box-shadow: 0 25px 40px -8px #eda94a;
         }
 
-        /* expandable description animation */
-        .card p {
-            transition: all 0.3s ease;
-            max-height: 100px;
+        article p {
+            transition: all 0.3s;
+            max-height: 70px;
             overflow: hidden;
             position: relative;
             z-index: 2;
+            font-size: 0.95rem;
         }
 
-        .card:hover p {
-            max-height: 300px;
-            color: #fff8e7;
+        article:hover p {
+            max-height: 250px;
         }
 
-        .card .full-description {
+        .full-description {
             opacity: 0;
             max-height: 0;
-            transition: opacity 0.4s ease, max-height 0.4s ease;
+            transition: opacity 0.4s, max-height 0.4s;
             margin-top: 0.5rem;
             padding: 0.5rem 0;
             border-top: 1px dashed rgba(255,180,90,0.5);
             z-index: 2;
             position: relative;
+            font-size: 0.9rem;
         }
 
-        .card:hover .full-description {
+        article:hover .full-description {
             opacity: 1;
             max-height: 200px;
         }
 
         .support-link {
             background: rgba(230, 165, 60, 0.18);
-            padding: 0.6rem 1.4rem;
-            border-radius: 60px;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             width: fit-content;
-            margin: 1rem 0 0.3rem;
+            margin: 0.8rem 0 0.2rem;
             border: 1px solid #eaa744;
             backdrop-filter: blur(4px);
-            transition: all 0.3s;
+            transition: 0.2s;
             z-index: 2;
             position: relative;
-        }
-
-        .support-link:hover {
-            background: rgba(240, 175, 70, 0.4);
-            transform: scale(1.05);
-            box-shadow: 0 0 20px #f5b550;
+            font-size: 0.9rem;
         }
 
         .support-link i { color: #ffbc5c; }
         .support-link a {
-            text-decoration: none;
             color: #fce0b1;
             font-weight: 600;
         }
-        .support-link a:hover { color: #ffe286; text-decoration: underline; }
 
         .meta-author {
             display: flex;
             flex-wrap: wrap;
-            gap: 18px 26px;
-            margin: 1rem 0 0.2rem;
-            font-size: 0.98rem;
+            gap: 10px 15px;
+            margin: 0.8rem 0 0.2rem;
+            font-size: 0.9rem;
             color: #c8dbea;
             border-top: 1px dashed #eeaf54;
-            padding-top: 1rem;
-            transition: all 0.3s;
+            padding-top: 0.8rem;
             z-index: 2;
             position: relative;
         }
@@ -305,414 +375,964 @@
         .dept-badge {
             background: #d8a13b;
             color: #03141f;
-            padding: 0.3rem 1.5rem;
+            padding: 0.2rem 1.2rem;
             border-radius: 40px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
             width: fit-content;
-            box-shadow: 0 0 18px #fabb57;
-            transition: 0.3s;
+            box-shadow: 0 0 12px #fabb57;
             z-index: 2;
             position: relative;
         }
 
-        .card:hover .dept-badge {
-            background: #f0b755;
-            box-shadow: 0 0 25px #fdcc80;
+        /* principal panel */
+        .principal-panel {
+            background: rgba(5, 35, 52, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 1.8rem;
+            margin: 1.5rem 0 2rem;
+            border: 2px solid #efa542;
+            box-shadow: 0 0 30px #e59f42;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.2rem;
         }
 
-        /* acknowledgement grid */
-        .acknowledge-grid {
+        .principal-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #dba44b, #b87e2e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #0a1f2c;
+            border: 4px solid #ffcf8a;
+            box-shadow: 0 0 30px #ffb347;
+        }
+
+        .principal-address {
+            font-size: 0.95rem;
+            color: #d9e6f0;
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        /* department heading */
+        .dept-heading {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fdcc80;
+            margin: 1.5rem 0 1rem;
+            text-align: center;
+        }
+
+        /* department grid */
+        .department-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem 1.8rem;
-            background: rgba(5, 35, 52, 0.65);
-            backdrop-filter: blur(20px);
-            padding: 2.5rem 2rem;
-            border-radius: 80px;
-            margin: 2.5rem 0 3.5rem;
+            gap: 0.7rem;
+            background: rgba(5, 35, 52, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 1.5rem 1rem;
+            border-radius: 40px;
+            margin: 0.5rem 0 2rem;
             justify-content: center;
             border: 2px solid #efa542;
-            box-shadow: 0 0 45px #e59f42;
+            box-shadow: 0 0 30px #e59f42;
         }
 
-        .ack-item {
+        .dept-item {
             text-align: center;
             background: #1b4b66cc;
-            padding: 0.7rem 1.5rem;
-            border-radius: 60px;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
             transition: 0.2s;
             border: 1px solid #f5b957;
             color: #f7e9d3;
             font-weight: 500;
             backdrop-filter: blur(4px);
+            font-size: 0.8rem;
+            display: inline-block;
         }
-        .ack-item i { color: #f3bc64; margin-right: 6px; }
-        .ack-item:hover { background: #2e6688; transform: scale(1.04); box-shadow: 0 0 30px #f1b44d; }
+        .dept-item i { 
+            font-size: 0.9rem; 
+            margin-right: 4px; 
+            color: #f3bc64;
+        }
+        .dept-item:hover {
+            background: #2e6688;
+            transform: scale(1.04);
+            box-shadow: 0 0 30px #f1b44d;
+        }
 
+        /* video container */
+        .video-container {
+            width: 100%;
+            margin: 1rem 0;
+            border-radius: 24px;
+            overflow: hidden;
+            background: #00000055;
+        }
+        .video-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(145deg, #2b5a7a, #1a4058);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            border: 2px solid #f3b45a;
+        }
+        .video-placeholder i {
+            font-size: 4rem;
+            color: #ffb95c;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        .video-caption {
+            font-size:0.8rem; 
+            color:#ccc;
+        }
+
+        /* event block */
         .event-block {
             background: #1b4d68b3;
             backdrop-filter: blur(8px);
-            border-radius: 40px;
-            padding: 1.8rem;
-            border-left: 16px solid #f29c2e;
+            border-radius: 30px;
+            padding: 1.5rem;
+            border-left: 12px solid #f29c2e;
         }
 
+        /* team & mentor boxes */
         .team-mentor-row {
             display: flex;
-            flex-wrap: wrap;
-            gap: 2.5rem;
-            margin: 3rem 0;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
         .team-box, .mentor-box {
-            background: rgba(18, 55, 78, 0.7);
+            background: rgba(18, 55, 78, 0.8);
             backdrop-filter: blur(16px);
-            flex: 1 1 300px;
-            border-radius: 60px;
-            padding: 2.5rem;
+            border-radius: 40px;
+            padding: 1.8rem;
             border: 1px solid #f3b45a;
         }
-
-        .community-wall {
-            background: rgba(10, 48, 70, 0.75);
-            backdrop-filter: blur(16px);
-            border-radius: 70px;
-            padding: 2.5rem;
-            margin: 2rem 0;
-            border: 3px solid #edaa42;
-            box-shadow: 0 0 70px #ecaa47;
+        .team-box ul, .mentor-box ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        .team-box li, .mentor-box li {
+            margin-bottom: 0.8rem;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(243, 180, 90, 0.2);
         }
 
-        footer {
-            text-align: center;
-            margin-top: 5rem;
-            color: #b9d1e0;
+        /* community wall */
+        .community-wall {
+            background: rgba(10, 48, 70, 0.8);
+            backdrop-filter: blur(16px);
+            border-radius: 40px;
             padding: 1.8rem;
-            border-top: 2px solid #edab4b;
+            margin: 1.5rem 0;
+            border: 2px solid #edaa42;
+            box-shadow: 0 0 40px #ecaa47;
+        }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+            background: rgba(5, 25, 38, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 3px solid #e5a53b;
+            padding: 2.5rem 1.5rem 1.5rem;
+            margin-top: 3rem;
+            color: #e0eefb;
+            width: 100%;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .footer-logo div:first-child {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, #fbb03b, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .footer-logo h3 {
+            font-size: 1.8rem;
+            color: #fdcc80;
+            letter-spacing: 2px;
+            margin: 0.5rem 0;
+        }
+
+        .footer-logo p {
+            font-size: 0.95rem;
+            color: #b9d1e0;
+            max-width: 300px;
+        }
+
+        .footer-section h4 {
+            color: #fdcc80;
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #e5a53b;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul li a {
+            color: #cbdae9;
+            text-decoration: none;
+            transition: 0.2s;
+            display: inline-block;
+        }
+
+        .footer-section ul li a:hover {
+            color: #ffb95c;
+            transform: translateX(5px);
+        }
+
+        .contact-info a {
+            color: #cbdae9;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.8rem;
+        }
+
+        .contact-info a:hover {
+            color: #ffb95c;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #e5a53b40;
+            color: #9bb5cc;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="logo">
-            <div class="logo-icon">स</div>
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">S</div>
             <div class="logo-text">
                 <span class="logo-hindi">सर्वस्व</span>
                 <span class="logo-english">sarvasva</span>
             </div>
         </div>
-        <div class="nav-links">
-            <a href="#" data-page="home" class="active">Home</a>
+        <div class="menu-toggle" id="menuToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+        <!-- Navigation menu with scrolling enabled -->
+        <nav id="navLinks">
+            <a href="#" data-page="home">Home</a>
             <a href="#" data-page="research">Research</a>
             <a href="#" data-page="news">News</a>
-            <a href="#" data-page="blog">Article</a>
+            <a href="#" data-page="blog">Blog</a>
+            <a href="#" data-page="projects">Projects</a>
             <a href="#" data-page="events">Events</a>
             <a href="#" data-page="community">Community</a>
             <a href="#" data-page="about">About Us</a>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <div class="container">
+    <main>
         <!-- HOME PAGE -->
-        <div id="home" class="page active-page">
-            <h1 class="section-title"><i class="fas fa-home"></i> Home · सर्वस्व Central</h1>
-            <div class="acknowledge-grid">
-                <div class="ack-item"><i class="fas fa-crown"></i> Dr. Asha Rao · Principal</div>
-                <div class="ack-item"><i class="fas fa-flask"></i> Biochemistry</div>
-                <div class="ack-item"><i class="fas fa-dna"></i> Bioinformatics</div>
-                <div class="ack-item"><i class="fas fa-leaf"></i> Biotechnology</div>
-                <div class="ack-item"><i class="fas fa-seedling"></i> Botany</div>
-                <div class="ack-item"><i class="fas fa-atom"></i> Chemistry</div>
-                <div class="ack-item"><i class="fas fa-laptop"></i> Computer Science</div>
-                <div class="ack-item"><i class="fas fa-shield"></i> Cyber Security</div>
-                <div class="ack-item"><i class="fas fa-chart-line"></i> Economics</div>
-                <div class="ack-item"><i class="fas fa-microchip"></i> Electronics</div>
-                <div class="ack-item"><i class="fas fa-language"></i> English</div>
-                <div class="ack-item"><i class="fas fa-fish"></i> Fisheries</div>
-                <div class="ack-item"><i class="fas fa-search"></i> Forensic Science</div>
-                <div class="ack-item"><i class="fas fa-map"></i> Geography</div>
-                <div class="ack-item"><i class="fas fa-mountain"></i> Geology</div>
-                <div class="ack-item"><i class="fas fa-hindi"></i> Hindi</div>
-                <div class="ack-item"><i class="fas fa-apple-alt"></i> Horticulture</div>
-                <div class="ack-item"><i class="fas fa-calculator"></i> Mathematics</div>
-                <div class="ack-item"><i class="fas fa-biohazard"></i> Microbiology</div>
-                <div class="ack-item"><i class="fas fa-medal"></i> N.C.C.</div>
-                <div class="ack-item"><i class="fas fa-hands-helping"></i> N.S.S.</div>
-                <div class="ack-item"><i class="fas fa-capsules"></i> Pharmaceutical Chem</div>
-                <div class="ack-item"><i class="fas fa-globe"></i> Physics</div>
-                <div class="ack-item"><i class="fas fa-dragon"></i> Seed Technology</div>
-                <div class="ack-item"><i class="fas fa-futbol"></i> Sports</div>
-                <div class="ack-item"><i class="fas fa-chart-bar"></i> Statistics</div>
-                <div class="ack-item"><i class="fas fa-dog"></i> Zoology</div>
-                <div class="ack-item"><i class="fas fa-handshake"></i> 86 Mentors</div>
+        <section id="home" class="page active-page">
+            <header class="section-header">
+                <h1 class="section-title"><i class="fas fa-home"></i> Home · सर्वस्व</h1>
+            </header>
+            
+            <!-- Principal section -->
+            <section class="principal-panel">
+                <figure class="principal-photo">
+                    <i class="fas fa-user-tie"></i>
+                </figure>
+                <div>
+                    <h2 style="color:#fdcc80;">Dr. (Major) Anamika Jain</h2>
+                    <p style="font-size:1.1rem;">Principal, Govt. Holkar Science College</p>
+                </div>
+                <address class="principal-address">
+                    <i class="fas fa-map-marker-alt" style="color:#fbb03b;"></i> AB Rd, near Bhawarkua Square, Janki Nagar, Indore, Madhya Pradesh 452001<br>
+                    <?--<i class="fas fa-phone-alt" style="color:#fbb03b;"></i> +91 120 4567890 · 
+                    <i class="fas fa-envelope" style="color:#fbb03b;"></i> principal@sarvasva.edu.in-->
+                </address>
+            </section>
+
+            <h2 class="dept-heading"><i class="fas fa-building"></i> OUR DEPARTMENTS</h2>
+            <div class="department-grid">
+                <span class="dept-item"><i class="fas fa-flask"></i> Biochemistry</span>
+                <span class="dept-item"><i class="fas fa-dna"></i> Bioinformatics</span>
+                <span class="dept-item"><i class="fas fa-leaf"></i> Biotechnology</span>
+                <span class="dept-item"><i class="fas fa-seedling"></i> Botany</span>
+                <span class="dept-item"><i class="fas fa-atom"></i> Chemistry</span>
+                <span class="dept-item"><i class="fas fa-laptop"></i> Computer Science</span>
+                <span class="dept-item"><i class="fas fa-shield"></i> Cyber Security</span>
+                <span class="dept-item"><i class="fas fa-chart-line"></i> Economics</span>
+                <span class="dept-item"><i class="fas fa-microchip"></i> Electronics</span>
+                <span class="dept-item"><i class="fas fa-language"></i> English</span>
+                <span class="dept-item"><i class="fas fa-fish"></i> Fisheries</span>
+                <span class="dept-item"><i class="fas fa-search"></i> Forensic Science</span>
+                <span class="dept-item"><i class="fas fa-map"></i> Geography</span>
+                <span class="dept-item"><i class="fas fa-mountain"></i> Geology</span>
+                <span class="dept-item"><i class="fas fa-hindi"></i> Hindi</span>
+                <span class="dept-item"><i class="fas fa-apple-alt"></i> Horticulture</span>
+                <span class="dept-item"><i class="fas fa-calculator"></i> Mathematics</span>
+                <span class="dept-item"><i class="fas fa-biohazard"></i> Microbiology</span>
+                <span class="dept-item"><i class="fas fa-medal"></i> N.C.C.</span>
+                <span class="dept-item"><i class="fas fa-hands-helping"></i> N.S.S.</span>
+                <span class="dept-item"><i class="fas fa-capsules"></i> Pharmaceutical Chem</span>
+                <span class="dept-item"><i class="fas fa-globe"></i> Physics</span>
+                <span class="dept-item"><i class="fas fa-dragon"></i> Seed Technology</span>
+                <span class="dept-item"><i class="fas fa-futbol"></i> Sports</span>
+                <span class="dept-item"><i class="fas fa-chart-bar"></i> Statistics</span>
+                <span class="dept-item"><i class="fas fa-dog"></i> Zoology</span>
+                <span class="dept-item"><i class="fas fa-handshake"></i> +Mentors</span>
             </div>
 
-            <div class="card-grid">
-                <div class="card">
-                    <h2>📰 News: Startup Conclave 2025</h2>
-                    <p>Annual entrepreneurship meet with investors and industry leaders. 30+ startups showcase.</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Two-day conclave featuring keynote sessions, panel discussions, and pitching competition. Open to all departments. Prizes worth ₹2 lakhs.<br>
-                        <i class="fas fa-map-pin"></i> Central Auditorium · 29-30 April
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Dr. S. Nair · CSE · HOD</div>
-                    <div class="support-link"><i class="fas fa-link"></i> <a href="#">📋 brochure & schedule (drive)</a></div>
+            <!-- NEWS SECTION -->
+            <section>
+                <header><h2 style="color:#fdcc80; margin:1rem 0;">📰 Latest News</h2></header>
+                <div class="card-grid">
+                    <article class="news-item" data-type="news">
+                        <header>
+                            <span class="dept-badge">Achievement</span>
+                            <h3>🏅 NCC National Camp</h3>
+                        </header>
+                        <p>5 cadets selected for RDC 2026.</p>
+                        <div class="full-description">Felicitation on 5 April. Best in drill and firing.</div>
+                        <footer class="meta-author">
+                            <address><i class="fas fa-user"></i> Lt. Sharma · NCC</address>
+                        </footer>
+                        <footer class="support-link">
+                            <i class="fas fa-drive"></i> 
+                            <a href="#">resources (drive)</a>
+                        </footer>
+                    </article>
+
+                    <article class="news-item" data-type="news">
+                        <header>
+                            <span class="dept-badge">Conference</span>
+                            <h3>📊 Economics Conference</h3>
+                        </header>
+                        <p>Call for papers: Behavioral Economics.</p>
+                        <div class="full-description">Abstracts due 15 May. ISBN proceedings. Keynote from Esther Duflo's team.</div>
+                        <footer class="meta-author">
+                            <address><i class="fas fa-user"></i> Dr. Iyer · Economics</address>
+                        </footer>
+                        <footer class="support-link">
+                            <i class="fas fa-drive"></i> 
+                            <a href="#">resources (drive)</a>
+                        </footer>
+                    </article>
                 </div>
-                <div class="card">
-                    <h2>🔬 Research: AI in Fisheries</h2>
-                    <p>Interdisciplinary project using deep learning for fish stock assessment in freshwater bodies.</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Collaboration between Computer Science and Fisheries dept. Funded by DST. Real-time monitoring system with 92% accuracy. Looking for student volunteers.<br>
-                        <i class="fas fa-flask"></i> Pilot study at Nagarjuna Sagar
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Prof. Khan · Fisheries · Principal Investigator</div>
-                    <div class="support-link"><i class="fas fa-file-pdf"></i> <a href="#">📄 research summary (drive)</a></div>
+            </section>
+
+            <!-- RESEARCH SECTION -->
+            <section>
+                <header><h2 style="color:#fdcc80; margin:1rem 0;">🔬 Featured Research</h2></header>
+                <div class="card-grid">
+                    <article class="research-item" data-type="research">
+                        <header>
+                            <span class="dept-badge">AI Research</span>
+                            <h3>🔬 AI in Fisheries</h3>
+                        </header>
+                        <p>Deep learning for fish stock assessment in freshwater bodies.</p>
+                        <div class="full-description">CS + Fisheries dept. Funded by DST. 92% accuracy. Student volunteers needed. Pilot at Nagarjuna Sagar.</div>
+                        <footer class="meta-author">
+                            <address><i class="fas fa-user"></i> Prof. Khan · Fisheries</address>
+                        </footer>
+                        <footer class="support-link">
+                            <i class="fas fa-drive"></i> 
+                            <a href="#">resources (drive)</a>
+                        </footer>
+                    </article>
+
+                    <article class="research-item" data-type="research">
+                        <header>
+                            <span class="dept-badge">Biotechnology</span>
+                            <h3>🧬 Gene editing for drought resistance</h3>
+                        </header>
+                        <p>CRISPR-Cas9 for drought-tolerant rice.</p>
+                        <div class="full-description">ICAR funded. Field trials at ICRISAT. 85% lab efficiency. RA positions open.</div>
+                        <footer class="meta-author">
+                            <address><i class="fas fa-user"></i> Dr. U. Menon · Biotech</address>
+                        </footer>
+                        <footer class="support-link">
+                            <i class="fas fa-drive"></i> 
+                            <a href="#">resources (drive)</a>
+                        </footer>
+                    </article>
                 </div>
-                <div class="card">
-                    <h2>📅 Event: युवा संवाद (Youth Parliament)</h2>
-                    <p>Mock parliament organized by NSS and NCC to debate contemporary issues.</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Participants simulate parliamentary proceedings. Topics: Digital India, Climate Change, Education Policy. Best speaker award. Registrations open till 10 May.<br>
-                        <i class="fas fa-calendar"></i> 15 May · 10 AM · Seminar Hall
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Lt. Sharma · N.C.C. · Coordinator</div>
-                    <div class="support-link"><i class="fas fa-image"></i> <a href="#">🎥 promo video & rules (drive)</a></div>
+            </section>
+
+            <!-- EVENTS SECTION -->
+            <section>
+                <header><h2 style="color:#fdcc80; margin:1rem 0;">📅 Upcoming Events</h2></header>
+                <div class="card-grid">
+                    <article class="event-item" data-type="events">
+                        <header>
+                            <span class="dept-badge">Symposium</span>
+                            <h3>🌾 Seed Tech Symposium</h3>
+                        </header>
+                        <p>Seed Technology, Horticulture</p>
+                        <div class="full-description">Seed production, testing, certification. Hands-on workshop. 12-13 June.</div>
+                        <footer class="meta-author">
+                            <address><i class="fas fa-user"></i> Dr. Deshmukh</address>
+                        </footer>
+                        <footer class="support-link">
+                            <i class="fas fa-drive"></i> 
+                            <a href="#">resources (drive)</a>
+                        </footer>
+                    </article>
                 </div>
-            </div>
-        </div>
+            </section>
+
+            <!-- PROJECTS SECTION -->
+            <section>
+                <header><h2 style="color:#fdcc80; margin:1rem 0;">🤖 Team Projects</h2></header>
+                <div class="card-grid">
+                    <article class="project-item" data-type="projects">
+                        <header>
+                            <span class="dept-badge">Working Model</span>
+                            <h3>🤖 Autonomous Agri-Bot</h3>
+                        </header>
+                        <p>AI-powered robot for precision farming.</p>
+                        <div class="full-description">Team: CS + Mech + Agri. Prototype ready. Uses computer vision for weed detection.</div>
+                        <figure class="video-container">
+                            <div class="video-placeholder">
+                                <i class="fas fa-play-circle"></i>
+                                <i class="fas fa-video"></i>
+                                <span style="color:#ffb95c;">model video</span>
+                            </div>
+                            <figcaption class="video-caption"><i class="fas fa-info-circle"></i> Video demonstration (click to play)</figcaption>
+                        </figure>
+                        <footer class="meta-author">
+                            <address><i class="fas fa-user"></i> Team AgriTech · CS, Mech</address>
+                        </footer>
+                    </article>
+                </div>
+            </section>
+        </section>
 
         <!-- RESEARCH PAGE -->
-        <div id="research" class="page">
-            <h1 class="section-title"><i class="fas fa-microscope"></i> Research</h1>
+        <section id="research" class="page">
+            <header class="section-header">
+                <h1 class="section-title"><i class="fas fa-microscope"></i> Research</h1>
+            </header>
             <div class="card-grid">
-                <div class="card">
-                    <span class="dept-badge">Biotechnology</span>
-                    <h3>Gene editing for drought resistance</h3>
-                    <p>CRISPR-Cas9 based approach to develop drought-tolerant rice varieties.</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Three-year project funded by ICAR. Field trials underway. Collaborating with ICRISAT. Looking for research assistants.<br>
-                        <i class="fas fa-dna"></i> 85% efficiency in lab conditions
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Dr. U. Menon · Biotech · Professor</div>
-                    <div class="support-link"><i class="fas fa-image"></i> <a href="#">🧬 dataset & protocol (drive)</a></div>
-                </div>
-                <div class="card">
-                    <span class="dept-badge">Geology</span>
-                    <h3>Lithium exploration in central India</h3>
-                    <p>Geochemical analysis of pegmatites in Korba district for lithium deposits.</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Preliminary surveys show anomalous lithium values. Detailed drilling proposed. Collaboration with GSI. Funding from Ministry of Mines.<br>
-                        <i class="fas fa-map"></i> 120 samples analyzed
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> M. Reddy · Geology · PhD scholar (sem 8)</div>
-                    <div class="support-link"><i class="fas fa-file-pdf"></i> <a href="#">🗺️ maps & geochem data (drive)</a></div>
-                </div>
+                <article>
+                    <header>
+                        <span class="dept-badge">AI Research</span>
+                        <h3>🔬 AI in Fisheries</h3>
+                    </header>
+                    <p>Deep learning for fish stock assessment in freshwater bodies.</p>
+                    <div class="full-description">CS + Fisheries dept. Funded by DST. 92% accuracy. Student volunteers needed. Pilot at Nagarjuna Sagar.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Prof. Khan · Fisheries</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
+
+                <article>
+                    <header>
+                        <span class="dept-badge">Biotechnology</span>
+                        <h3>🧬 Gene editing for drought resistance</h3>
+                    </header>
+                    <p>CRISPR-Cas9 for drought-tolerant rice.</p>
+                    <div class="full-description">ICAR funded. Field trials at ICRISAT. 85% lab efficiency. RA positions open.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Dr. U. Menon · Biotech</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
+
+                <article>
+                    <header>
+                        <span class="dept-badge">Geology</span>
+                        <h3>⛏️ Lithium exploration</h3>
+                    </header>
+                    <p>Geochemical analysis in Korba.</p>
+                    <div class="full-description">Preliminary Li anomalies. Collaboration with GSI. 120 samples analyzed.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> M. Reddy · Geology · sem 8</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
             </div>
-        </div>
+        </section>
 
         <!-- NEWS PAGE -->
-        <div id="news" class="page">
-            <h1 class="section-title"><i class="fas fa-newspaper"></i> News</h1>
+        <section id="news" class="page">
+            <header class="section-header">
+                <h1 class="section-title"><i class="fas fa-newspaper"></i> News</h1>
+            </header>
             <div class="card-grid">
-                <div class="card">
-                    <h3>🏅 NCC National Camp selection</h3>
-                    <p>Five cadets selected for Republic Day camp 2026.</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Cadets from our unit excelled in state-level competition. They will attend training at Delhi. Felicitation ceremony on 5 April.<br>
-                        <i class="fas fa-trophy"></i> Best in drill and firing
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Lt. Sharma · N.C.C. · ANO</div>
-                    <div class="support-link"><i class="fas fa-image"></i> <a href="#">📸 selection photos (drive)</a></div>
-                </div>
-                <div class="card">
-                    <h3>📊 Economics conference: call for papers</h3>
-                    <p>National conference on "Behavioral Economics and Public Policy".</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Submit abstracts by 15 May. Selected papers will be published in conference proceedings with ISBN. Keynote speaker: Dr. Esther Duflo's team member.<br>
-                        <i class="fas fa-chart-line"></i> Registration fee: ₹500
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Dr. Iyer · Economics · HOD</div>
-                    <div class="support-link"><i class="fas fa-file-pdf"></i> <a href="#">📑 call for papers & guidelines (drive)</a></div>
-                </div>
-            </div>
-        </div>
+                <article>
+                    <header>
+                        <span class="dept-badge">Achievement</span>
+                        <h3>🏅 NCC National Camp</h3>
+                    </header>
+                    <p>5 cadets selected for RDC 2026.</p>
+                    <div class="full-description">Felicitation on 5 April. Best in drill and firing.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Lt. Sharma · NCC</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
 
-        <!-- BLOG/ARTICLE PAGE -->
-        <div id="blog" class="page">
-            <h1 class="section-title"><i class="fas fa-feather"></i> Article</h1>
-            <div class="card-grid">
-                <div class="card">
-                    <h3>“Forensic path: a day at crime lab”</h3>
-                    <p>Student blogger shares experience visiting state forensic lab.</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Detailed walkthrough of fingerprint analysis, DNA profiling, and cyber forensics units. Interview with senior forensic scientist. Part 1 of 3 series.<br>
-                        <i class="fas fa-search"></i> 15 min read
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> S. Kumar · Forensic Science · sem 6</div>
-                    <div class="support-link"><i class="fas fa-image"></i> <a href="#">🔍 lab photos & interview (drive)</a></div>
-                </div>
-                <div class="card">
-                    <h3>“Mathematics of classical music”</h3>
-                    <p>Exploring the mathematical patterns in Indian classical ragas.</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Fourier analysis of tanpura drones, fibonacci in tala cycles, and group theory in swaras. Includes audio examples and interactive visualizations.<br>
-                        <i class="fas fa-music"></i> 20 min read
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Dr. Priya · Mathematics · Associate Prof</div>
-                    <div class="support-link"><i class="fas fa-file-pdf"></i> <a href="#">🎼 article with audio (drive)</a></div>
-                </div>
+                <article>
+                    <header>
+                        <span class="dept-badge">Conference</span>
+                        <h3>📊 Economics Conference</h3>
+                    </header>
+                    <p>Call for papers: Behavioral Economics.</p>
+                    <div class="full-description">Abstracts due 15 May. ISBN proceedings. Keynote from Esther Duflo's team.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Dr. Iyer · Economics</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
+
+                <article>
+                    <header>
+                        <span class="dept-badge">Grant</span>
+                        <h3>🔬 DST Funding for Physics</h3>
+                    </header>
+                    <p>Quantum materials project sanctioned.</p>
+                    <div class="full-description">Rs. 80 lakhs funding for 3 years. Collaboration with IIT Bombay.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Dr. Mehta · Physics</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
             </div>
-        </div>
+        </section>
+
+        <!-- BLOG PAGE -->
+        <section id="blog" class="page">
+            <header class="section-header">
+                <h1 class="section-title"><i class="fas fa-feather"></i> Blog</h1>
+            </header>
+            <div class="card-grid">
+                <article>
+                    <header>
+                        <span class="dept-badge">Student Blog</span>
+                        <h3>“Forensic path: a day at crime lab”</h3>
+                    </header>
+                    <p>Student blog on forensic lab visit.</p>
+                    <div class="full-description">Fingerprint analysis, DNA profiling, cyber forensics. Interview with scientist.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> S. Kumar · Forensic · sem 6</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
+
+                <article>
+                    <header>
+                        <span class="dept-badge">Feature</span>
+                        <h3>“Mathematics of classical music”</h3>
+                    </header>
+                    <p>Fourier analysis of tanpura, Fibonacci in talas.</p>
+                    <div class="full-description">Includes audio examples and interactive visualizations. 20 min read.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Dr. Priya · Mathematics</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
+            </div>
+        </section>
+
+        <!-- PROJECTS PAGE -->
+        <section id="projects" class="page">
+            <header class="section-header">
+                <h1 class="section-title"><i class="fas fa-rocket"></i> Team Projects</h1>
+            </header>
+            <div class="card-grid">
+                <article>
+                    <header>
+                        <span class="dept-badge">Working Model</span>
+                        <h3>🤖 Autonomous Agri-Bot</h3>
+                    </header>
+                    <p>AI-powered robot for precision farming.</p>
+                    <div class="full-description">Team: CS + Mech + Agri. Prototype ready. Uses computer vision for weed detection.</div>
+                    <figure class="video-container">
+                        <div class="video-placeholder">
+                            <i class="fas fa-play-circle"></i>
+                            <i class="fas fa-video"></i>
+                            <span style="color:#ffb95c;">model video</span>
+                        </div>
+                        <figcaption class="video-caption"><i class="fas fa-info-circle"></i> Video demonstration (click to play)</figcaption>
+                    </figure>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Team AgriTech · CS, Mech</address>
+                    </footer>
+                </article>
+
+                <article>
+                    <header>
+                        <span class="dept-badge">Deployed</span>
+                        <h3>🌊 Water Quality Monitor</h3>
+                    </header>
+                    <p>IoT device for real-time water analysis.</p>
+                    <div class="full-description">Deployed in 5 lakes. Measures pH, turbidity, dissolved oxygen. Funded by startup cell.</div>
+                    <figure class="video-container">
+                        <div class="video-placeholder">
+                            <i class="fas fa-play-circle"></i>
+                            <i class="fas fa-video"></i>
+                            <span style="color:#ffb95c;">model video</span>
+                        </div>
+                        <figcaption class="video-caption"><i class="fas fa-info-circle"></i> Video demonstration (click to play)</figcaption>
+                    </figure>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Electronics · Team Aqua</address>
+                    </footer>
+                </article>
+            </div>
+        </section>
 
         <!-- EVENTS PAGE -->
-        <div id="events" class="page">
-            <h1 class="section-title"><i class="fas fa-calendar-alt"></i> Events</h1>
+        <section id="events" class="page">
+            <header class="section-header">
+                <h1 class="section-title"><i class="fas fa-calendar-alt"></i> Events</h1>
+            </header>
             <div class="card-grid">
-                <div class="card event-block">
-                    <h3>🌾 Seed Tech Symposium</h3>
-                    <p><i class="fas fa-building"></i> Seed Technology, Horticulture</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Two-day symposium on hybrid seed production, seed testing, and certification. Hands-on workshop on seed viability testing. Industry stalls.<br>
-                        <i class="fas fa-calendar"></i> 12-13 June · 9 AM-5 PM · Agriculture Hall
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Dr. Deshmukh · Seed Technology</div>
-                    <div class="support-link"><i class="fas fa-link"></i> <a href="#">📋 programme & registration (drive)</a></div>
-                </div>
-                <div class="card event-block">
-                    <h3>🧪 Chemistry Outreach Workshop</h3>
-                    <p><i class="fas fa-building"></i> Dept: Chemistry</p>
-                    <div class="full-description">
-                        <strong>Full description:</strong> Fun experiments for school students: liquid nitrogen show, chemiluminescence, and polymer making. Aimed at popularizing science. Volunteer slots open.<br>
-                        <i class="fas fa-calendar"></i> 5 April 2025 · 11 AM · Chemistry Lawn
-                    </div>
-                    <div class="meta-author"><i class="fas fa-user"></i> Dr. Jadhav · Chemistry · Prof</div>
-                    <div class="support-link"><i class="fas fa-image"></i> <a href="#">🎥 event trailer & guide (drive)</a></div>
-                </div>
+                <article class="event-block">
+                    <header>
+                        <span class="dept-badge">Symposium</span>
+                        <h3>🌾 Seed Tech Symposium</h3>
+                    </header>
+                    <p>Seed Technology, Horticulture</p>
+                    <div class="full-description">Seed production, testing, certification. Hands-on workshop. 12-13 June.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Dr. Deshmukh</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
+
+                <article class="event-block">
+                    <header>
+                        <span class="dept-badge">Outreach</span>
+                        <h3>🧪 Chemistry Outreach</h3>
+                    </header>
+                    <p>Fun experiments for school kids.</p>
+                    <div class="full-description">Liquid nitrogen, chemiluminescence. 5 April 2025 · 11 AM.</div>
+                    <footer class="meta-author">
+                        <address><i class="fas fa-user"></i> Dr. Jadhav · Chemistry</address>
+                    </footer>
+                    <footer class="support-link">
+                        <i class="fas fa-drive"></i> 
+                        <a href="#">resources (drive)</a>
+                    </footer>
+                </article>
             </div>
-        </div>
+        </section>
 
         <!-- COMMUNITY PAGE -->
-        <div id="community" class="page">
-            <h1 class="section-title"><i class="fas fa-users"></i> Community</h1>
+        <section id="community" class="page">
+            <header class="section-header">
+                <h1 class="section-title"><i class="fas fa-users"></i> Community</h1>
+            </header>
             <div class="community-wall">
-                <h2 style="color: #fdcc80; margin-bottom: 1.5rem;">✨ सर्वस्व Community Board ✨</h2>
                 <div class="card-grid">
-                    <div class="card">
-                        <i class="fas fa-comments" style="color:#ffae42; font-size: 1.8rem;"></i>
-                        <h3>Research Scholars Group</h3>
-                        <p>Weekly journal club and peer feedback sessions.</p>
-                        <div class="full-description">
-                            <strong>Full description:</strong> 200+ members from all departments. Meets every Friday 4 PM. Currently discussing "Open Science" and preprints. New members welcome.<br>
-                            <i class="fas fa-link"></i> WhatsApp group link available
-                        </div>
-                        <div class="support-link"><i class="fas fa-drive"></i> <a href="#">📎 past presentations (drive)</a></div>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-code-branch" style="color:#ffae42; font-size: 1.8rem;"></i>
-                        <h3>Open Source Club</h3>
-                        <p>Building FOSS projects for campus utilities.</p>
-                        <div class="full-description">
-                            <strong>Full description:</strong> Current project: "CampusConnect" app for event updates and resource sharing. Tech stack: React, Node, MongoDB. Mentors from CSE/ECE.<br>
-                            <i class="fas fa-calendar"></i> Coding sessions: Tue/Thu 5 PM
-                        </div>
-                        <div class="support-link"><i class="fas fa-drive"></i> <a href="#">💻 repo & onboarding (drive)</a></div>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-leaf" style="color:#ffae42; font-size: 1.8rem;"></i>
-                        <h3>Eco Task Force</h3>
-                        <p>Campus greening and sustainability initiatives.</p>
-                        <div class="full-description">
-                            <strong>Full description:</strong> Plantation drive every Sunday. Plastic audit ongoing. Collaborating with NSS for waste segregation. Monthly nature walks.<br>
-                            <i class="fas fa-hand-holding-heart"></i> 120+ active volunteers
-                        </div>
-                        <div class="support-link"><i class="fas fa-drive"></i> <a href="#">🌿 project reports (drive)</a></div>
-                    </div>
-                </div>
-                <div style="margin-top: 2rem; background: #1d5472; border-radius: 100px; padding: 1rem 2rem;">
-                    <i class="fas fa-hand-holding-heart" style="color: #faa75e;"></i> community project: “Each One Mentor One” · 120+ active mentor-mentee pairs
+                    <article>
+                        <header>
+                            <span class="dept-badge">Active</span>
+                            <h3><i class="fas fa-comments" style="color:#ffae42"></i> Research Scholars Group</h3>
+                        </header>
+                        <p>Weekly journal club, 200+ members.</p>
+                        <div class="full-description">Meets Friday 4 PM. Open science discussions.</div>
+                        <footer class="meta-author">
+                            <address><i class="fas fa-user"></i> PhD Coordinators</address>
+                        </footer>
+                        <footer class="support-link">
+                            <i class="fas fa-drive"></i> 
+                            <a href="#">resources (drive)</a>
+                        </footer>
+                    </article>
+
+                    <article>
+                        <header>
+                            <span class="dept-badge">Coding</span>
+                            <h3><i class="fas fa-code-branch" style="color:#ffae42"></i> Open Source Club</h3>
+                        </header>
+                        <p>Building campus apps.</p>
+                        <div class="full-description">React/Node projects. Meet Tue/Thu 5 PM.</div>
+                        <footer class="meta-author">
+                            <address><i class="fas fa-user"></i> CS/ECE</address>
+                        </footer>
+                        <footer class="support-link">
+                            <i class="fas fa-drive"></i> 
+                            <a href="#">resources (drive)</a>
+                        </footer>
+                    </article>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- ABOUT US PAGE -->
-        <div id="about" class="page">
-            <h1 class="section-title"><i class="fas fa-id-card"></i> About Us</h1>
+        <!-- ABOUT PAGE -->
+        <section id="about" class="page">
+            <header class="section-header">
+                <h1 class="section-title"><i class="fas fa-id-card"></i> About Us</h1>
+            </header>
             <div class="team-mentor-row">
-                <div class="team-box">
-                    <h3><i class="fas fa-user-friends"></i> Team (example)</h3>
-                    <ul style="list-style:none;">
-                        <li><i class="fas fa-id-badge"></i> Kavya S · Biochemistry · sem 6 · Coordinator</li>
-                        <li><i class="fas fa-id-badge"></i> Rohan P · CS · sem 8 · Tech Lead</li>
-                        <li><i class="fas fa-id-badge"></i> Megha T · Fisheries · sem 4 · Design</li>
-                        <li><i class="fas fa-id-badge"></i> Arjun K · Physics · sem 6 · Outreach</li>
-                    </ul>
-                </div>
-                <div class="mentor-box">
-                    <h3><i class="fas fa-chalkboard-teacher"></i> Mentors (example)</h3>
+                <section class="mentor-box">
+                    <h3><i class="fas fa-chalkboard-teacher"></i> Mentors</h3>
                     <ul>
-                        <li>Dr. T. Desai · Botany (HOD) · mentor for 6 PhDs</li>
-                        <li>Dr. Anita · Microbiology · 15 yrs experience</li>
-                        <li>Prof. Shinde · Seed Technology · industry liaison</li>
-                        <li>Dr. Rafiq · Statistics · data science expert</li>
+                        <li><i class="fas fa-chalkboard"></i> Dr. T. Desai · Botany (HOD)</li>
+                        <li><i class="fas fa-chalkboard"></i> Dr. Anita · Microbiology</li>
+                        <li><i class="fas fa-chalkboard"></i> Prof. Shinde · Seed Technology</li>
+                        <li><i class="fas fa-chalkboard"></i> Dr. Rafiq · Statistics</li>
                     </ul>
-                </div>
+                </section>
+                <section class="team-box">
+                    <h3><i class="fas fa-user-friends"></i> Core Team</h3>
+                    <ul>
+                        <li><i class="fas fa-id-badge"></i> Prabhanshu Shrivastava · Computer Science · sem 4</li>
+                        <li><i class="fas fa-id-badge"></i> Swastik Vishwakarma · Cyber Secrity · sem 4</li>
+                        <li><i class="fas fa-id-badge"></i> Adity Suman · Forensic · sem 4</li>
+                        <li><i class="fas fa-id-badge"></i> Ananya Anil Kumar · Computer Science · sem 4</li>
+                        <li><i class="fas fa-id-badge"></i> Garima · Electronics · sem 4</li>
+                    </ul>
+                </section>
             </div>
-            <div style="background: #1b5470; border-radius: 50px; padding: 1.5rem;">
-                <i class="fas fa-star"></i> Featured mentor: Dr. Jayashree (Chemistry) · 25 patents · guided 30+ students
+            <aside style="background:#1b5470; border-radius:50px; padding:1.5rem; margin-top:1.5rem;">
+                <i class="fas fa-star"></i> Featured mentor: Dr. Jayashree (Chemistry) · 25 patents
+            </aside>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <div>S</div>
+                <h3>SARVASVA</h3>
+                <p>A DYNAMIC PLATFORM FOR ACADEMIC EXCELLENCE, RESEARCH, AND INNOVATION.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>QUICK LINKS</h4>
+                <ul>
+                    <li><a href="#" data-page="home">Home</a></li>
+                    <li><a href="#" data-page="research">Research</a></li>
+                    <li><a href="#" data-page="news">News</a></li>
+                    <li><a href="#" data-page="blog">Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>EXPLORE</h4>
+                <ul>
+                    <li><a href="#" data-page="events">Events</a></li>
+                    <li><a href="#" data-page="about">About Us</a></li>
+                    <li><a href="#" data-page="about">Team</a></li>
+                    <li><a href="#" data-page="about">Mentors</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>CONNECT</h4>
+                <div class="contact-info">
+                    <a href="mailto:contact@sarvasva.edu"><i class="fas fa-envelope"></i> contact@sarvasva.edu</a>
+                    <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> Academic Campus</a>
+                </div>
             </div>
         </div>
-
-        <footer>
-            सर्वस्व · dynamic descriptions on hover · all sections include full details · diagonal official background
-        </footer>
-    </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 SARVASVA. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
 
     <script>
         (function() {
-            // Page navigation
+            // Get all page sections
             const pages = {
                 home: document.getElementById('home'),
                 research: document.getElementById('research'),
                 news: document.getElementById('news'),
                 blog: document.getElementById('blog'),
+                projects: document.getElementById('projects'),
                 events: document.getElementById('events'),
                 community: document.getElementById('community'),
                 about: document.getElementById('about')
             };
-            const navLinks = document.querySelectorAll('.nav-links a');
 
+            // Get all navigation links (both header and footer)
+            const navLinks = document.querySelectorAll('nav a, .footer-section a[data-page]');
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinksContainer = document.getElementById('navLinks');
+
+            // Function to activate a page
             function activatePage(pageId) {
-                for (let key in pages) pages[key]?.classList.remove('active-page');
-                if (pages[pageId]) pages[pageId].classList.add('active-page');
+                // Hide all pages
+                for (let key in pages) {
+                    if (pages[key]) {
+                        pages[key].classList.remove('active-page');
+                    }
+                }
+                
+                // Show selected page
+                if (pages[pageId]) {
+                    pages[pageId].classList.add('active-page');
+                }
+                
+                // Update active state in navigation
                 navLinks.forEach(link => {
                     link.classList.remove('active');
-                    if (link.dataset.page === pageId) link.classList.add('active');
+                    if (link.dataset.page === pageId) {
+                        link.classList.add('active');
+                    }
                 });
+                
+                // Update URL hash
                 history.pushState({ page: pageId }, '', `#${pageId}`);
+                
+                // Close mobile menu
+                navLinksContainer.classList.remove('show');
+                const icon = menuToggle.querySelector('i');
+                if (icon) icon.className = 'fas fa-bars';
             }
 
+            // Add click handlers to all navigation links
             navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
+                link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const pageId = link.dataset.page;
-                    if (pageId) activatePage(pageId);
+                    const pageId = this.dataset.page;
+                    if (pageId && pages[pageId]) {
+                        activatePage(pageId);
+                    }
                 });
             });
 
-            const hash = window.location.hash.substring(1);
-            if (hash && pages[hash]) activatePage(hash);
-            else activatePage('home');
-
-            window.addEventListener('popstate', (e) => {
-                const hash = window.location.hash.substring(1);
-                if (hash && pages[hash]) activatePage(hash);
-                else activatePage('home');
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navLinksContainer.classList.toggle('show');
+                const icon = this.querySelector('i');
+                if (navLinksContainer.classList.contains('show')) {
+                    icon.className = 'fas fa-times';
+                } else {
+                    icon.className = 'fas fa-bars';
+                }
+                
+                // When menu opens, scroll to top of menu
+                if (navLinksContainer.classList.contains('show')) {
+                    navLinksContainer.scrollTop = 0;
+                }
             });
 
-            // drive placeholders
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!navLinksContainer.contains(event.target) && !menuToggle.contains(event.target)) {
+                    navLinksContainer.classList.remove('show');
+                    const icon = menuToggle.querySelector('i');
+                    if (icon) icon.className = 'fas fa-bars';
+                }
+            });
+
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', function(e) {
+                const hash = window.location.hash.substring(1);
+                if (hash && pages[hash]) {
+                    activatePage(hash);
+                } else {
+                    activatePage('home');
+                }
+            });
+
+            // Check initial hash
+            const hash = window.location.hash.substring(1);
+            if (hash && pages[hash]) {
+                activatePage(hash);
+            } else {
+                activatePage('home');
+            }
+
+            // Make home page cards clickable to navigate to sections
+            document.querySelectorAll('#home article').forEach(article => {
+                article.addEventListener('click', function(e) {
+                    // Don't navigate if clicking on a link
+                    if (e.target.closest('a')) return;
+                    
+                    // Determine which page this card belongs to
+                    if (this.classList.contains('news-item')) {
+                        activatePage('news');
+                    } else if (this.classList.contains('research-item')) {
+                        activatePage('research');
+                    } else if (this.classList.contains('event-item')) {
+                        activatePage('events');
+                    } else if (this.classList.contains('project-item')) {
+                        activatePage('projects');
+                    }
+                });
+            });
+
+            // Make drive links open in new tab
             document.querySelectorAll('.support-link a').forEach(a => {
                 a.setAttribute('target', '_blank');
-                if (!a.href || a.href.includes('#')) a.href = 'https://drive.google.com';
+                if (!a.href || a.href.includes('#')) {
+                    a.setAttribute('href', 'https://drive.google.com');
+                }
             });
         })();
     </script>
